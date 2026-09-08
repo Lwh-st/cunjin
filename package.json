@@ -1,0 +1,69 @@
+{
+  "name": "cunjin",
+  "productName": "寸进",
+  "version": "1.0.0",
+  "description": "计划 / 计时 / 进度 桌面悬浮窗（Windows 便携式桌面小工具）",
+  "main": "main.js",
+  "author": "Lwh-st",
+  "license": "CC-BY-NC-4.0",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.cunjin.app",
+    "productName": "寸进",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "tools",
+        "to": "tools",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "dir",
+          "arch": ["x64"]
+        },
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "icon-design/cunjin.ico"
+    },
+    "nsis": {
+      "artifactName": "cunjin-${version}-win-x64-setup.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "cunjin-${version}-win-x64-portable.${ext}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.1.1",
+    "electron-builder": "^26.15.3"
+  }
+}
+

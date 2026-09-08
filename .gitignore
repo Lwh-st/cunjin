@@ -1,0 +1,18 @@
+# 依赖与构建产物
+node_modules/
+dist/
+releases/
+
+# 用户数据（绝不进仓库）
+data/
+*.settings.json
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+*.log
+
+# 本地探针/临时
+*_probe.js
+知识库补记*.md
+启动寸进.bat

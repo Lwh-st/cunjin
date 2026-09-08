@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>选择颜色</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  html, body { background: transparent; }
+  body { padding: 12px; box-sizing: border-box; }
+  #cp-title { font-size: 13px; color: var(--text); margin-bottom: 10px; font-weight: 600; }
+  .cp-modal {
+    background: rgba(var(--panel-rgb), 0.96);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    box-sizing: border-box;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  }
+  .cp-btns { display: flex; gap: 10px; margin-top: 12px; }
+  .cp-btns .btn { flex: 1; }
+  /* 色盘不变形 */
+  .color-wheel-wrap canvas { max-width: 100%; }
+  .color-sv, .color-hue { cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="cp-modal">
+  <div id="cp-title">选择颜色</div>
+  <div id="cp-wheel"></div>
+  <div class="cp-btns">
+    <button id="cp-cancel" class="btn btn-ghost" type="button">取消</button>
+    <button id="cp-ok" class="btn" type="button">保存</button>
+  </div>
+</div>
+<script src="js/util.js"></script>
+<script src="js/colorpicker.js"></script>
+</body>
+</html>

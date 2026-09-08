@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data: blob:; media-src 'self' file: blob:; frame-src 'self' file:">
+  <title>寸进</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="bg-layer"></div>
+  <div id="bg-media"></div>
+  <div id="bg-dim"></div>
+
+  <div id="app">
+    <header id="titlebar">
+      <div id="title-group">
+        <span class="app-name">寸进 <span class="app-sub">cunjin</span></span>
+        <div class="win-controls">
+          <button id="btn-min" class="tb-btn" title="最小化">—</button>
+          <button id="btn-close" class="tb-btn tb-close" title="关闭">×</button>
+          <button id="btn-sidebar" class="tb-btn" title="收起 / 展开侧栏">≡</button>
+        </div>
+      </div>
+    </header>
+
+    <div id="body-row">
+
+    <!-- 侧栏：浮/设/顶 + 计划/计时/进度，竖排，可收起 -->
+    <div id="sidebar">
+      <div class="side-group">
+        <button id="btn-widget" class="sb-item" title="打开悬浮窗">
+          <span class="sb-icon">浮</span>
+          <span class="sb-dot"></span>
+        </button>
+        <button id="btn-gear" class="sb-item" title="背景与外观设置">
+          <span class="sb-icon">设</span>
+          <span class="sb-dot"></span>
+        </button>
+        <button id="btn-pin" class="sb-item" title="置顶 开/关">
+          <span class="sb-icon">顶</span>
+          <span class="sb-dot"></span>
+        </button>
+      </div>
+      <div class="side-sep"></div>
+      <div class="side-group side-tabs">
+        <button class="sb-tab tab active" data-tab="plan" title="计划">
+          <span class="sb-icon">计划</span>
+          <span class="sb-lines"></span>
+        </button>
+        <button class="sb-tab tab" data-tab="timer" title="计时">
+          <span class="sb-icon">计时</span>
+          <span class="sb-lines"></span>
+        </button>
+        <button class="sb-tab tab" data-tab="progress" title="进度">
+          <span class="sb-icon">进度</span>
+          <span class="sb-lines"></span>
+        </button>
+      </div>
+    </div>
+
+    <main id="panels">
+      <!-- 计划（今日任务在最上，长期目标在最下） -->
+      <section id="panel-plan" class="panel active">
+        <div class="card plan-group" data-kind="today">
+          <div class="plan-head">
+            <h3>今日任务</h3>
+            <div class="plan-head-actions">
+              <button class="plan-style-for" title="文字样式" data-for="today">⋯</button>
+              <button class="plan-toggle" title="添加任务">＋</button>
+            </div>
+          </div>
+          <ul class="plan-list"></ul>
+          <div class="plan-input-wrap hidden">
+            <textarea class="plan-input" rows="1" placeholder="今天要做什么…"></textarea>
+            <div class="plan-input-actions">
+              <button class="btn btn-sm plan-cancel">取消</button>
+              <button class="btn btn-sm plan-ok">添加</button>
+            </div>
+          </div>
+        </div>
+        <div class="card plan-group" data-kind="short">
+          <div class="plan-head">
+            <h3>短期计划</h3>
+            <div class="plan-head-actions">
+              <button class="plan-style-for" title="文字样式" data-for="short">⋯</button>
+              <button class="plan-toggle" title="添加计划">＋</button>
+            </div>
+          </div>
+          <ul class="plan-list"></ul>
+          <div class="plan-input-wrap hidden">
+            <textarea class="plan-input" rows="1" placeholder="写个短期计划…"></textarea>
+            <div class="plan-input-actions">
+              <button class="btn btn-sm plan-cancel">取消</button>
+              <button class="btn btn-sm plan-ok">添加</button>
+            </div>
+          </div>
+        </div>
+        <div class="card plan-group" data-kind="long">
+          <div class="plan-head">
+            <h3>长期目标</h3>
+            <div class="plan-head-actions">
+              <button class="plan-style-for" title="文字样式" data-for="long">⋯</button>
+              <button class="plan-toggle" title="添加目标">＋</button>
+            </div>
+          </div>
+          <ul class="plan-list"></ul>
+          <div class="plan-input-wrap hidden">
+            <textarea class="plan-input" rows="1" placeholder="写个长期目标…"></textarea>
+            <div class="plan-input-actions">
+              <button class="btn btn-sm plan-cancel">取消</button>
+              <button class="btn btn-sm plan-ok">添加</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 计时 -->
+      <section id="panel-timer" class="panel">
+        <div class="panel-toolbar">
+          <button id="timer-add" class="btn btn-sm btn-new">＋ 新建计时器</button>
+        </div>
+        <div id="timer-list" class="stack" data-cols="1"></div>
+      </section>
+
+      <!-- 进度 -->
+      <section id="panel-progress" class="panel">
+        <div class="panel-toolbar">
+          <button id="pg-add" class="btn btn-sm btn-new">＋ 新建进度条</button>
+        </div>
+        <div id="pg-list" class="stack" data-cols="1"></div>
+      </section>
+    </main>
+    </div><!-- /body-row -->
+  </div>
+
+  <!-- 设置弹窗（不内嵌壁纸库，只留入口按钮） -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-card card">
+      <h3>背景与外观</h3>
+      <div class="set-row">
+        <button id="bg-pick-library" class="btn">选择壁纸库…</button>
+        <button id="bg-open-library" class="btn btn-ghost">浏览壁纸库</button>
+      </div>
+      <p id="bg-current" class="hint" style="text-align:left;margin:0"></p>
+      <div class="set-row">
+        <button id="bg-pick-folder" class="btn">单个壁纸文件夹…</button>
+        <button id="bg-pick-file" class="btn btn-ghost">图片 / 视频文件…</button>
+      </div>
+      <label class="set-check"><input id="bg-transparent" type="checkbox"> 透明·跟随桌面壁纸（scene 动画的最佳搭档）</label>
+      <div class="set-row" data-cmp="blur">
+        <label class="unit">模糊</label>
+        <input id="bg-blur" type="range" min="0" max="100" value="33">
+        <span id="bg-blur-val" class="range-val">33%</span>
+      </div>
+      <div class="set-row" data-cmp="dim">
+        <label class="unit">压暗</label>
+        <input id="bg-dim-range" type="range" min="0" max="100" value="38">
+        <span id="bg-dim-val" class="range-val">38%</span>
+      </div>
+      <div class="set-row" data-cmp="alpha">
+        <label class="unit">组件透明</label>
+        <input id="bg-alpha" type="range" min="0" max="100" value="40">
+        <span id="bg-alpha-val" class="range-val">40%</span>
+      </div>
+      <div class="set-row" data-cmp="panelblur">
+        <label class="unit">组件毛玻璃</label>
+        <input id="bg-panel-blur" type="range" min="0" max="100" value="40">
+        <span id="bg-panel-blur-val" class="range-val">40%</span>
+      </div>
+      <div class="set-row">
+        <label class="unit">侧栏</label>
+        <select id="ui-sidebar">
+          <option value="left">左侧</option>
+          <option value="right">右侧</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label class="unit">计时列数</label>
+        <select id="ui-cols-timer">
+          <option value="1">单列</option>
+          <option value="2">双列</option>
+          <option value="3">三列</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label class="unit">进度列数</label>
+        <select id="ui-cols-progress">
+          <option value="1">单列</option>
+          <option value="2">双列</option>
+          <option value="3">三列</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label class="unit">主题色</label>
+        <select id="bg-theme">
+          <option value="auto">跟随壁纸</option>
+          <option value="default">默认</option>
+        </select>
+      </div>
+      <label class="set-check"><input id="bg-live" type="checkbox"> 动态嵌入网页壁纸（实验）</label>
+      <div class="set-row">
+        <button id="bg-clear" class="btn btn-ghost">清除背景</button>
+        <button id="settings-close" class="btn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 壁纸库浏览页（独立弹窗：大图预览 + 选择确认） -->
+  <div id="lib-browser-modal" class="modal hidden">
+    <div class="lib-browser">
+      <div class="lib-browser-head">
+        <span class="app-name">壁纸库</span>
+        <span id="lib-browser-status" class="unit"></span>
+        <button id="lib-browser-rescan" class="btn btn-sm">刷新</button>
+        <button id="lib-browser-close" class="tb-btn tb-close" title="关闭">×</button>
+      </div>
+      <div id="lib-browser-grid" class="lib-grid large"></div>
+    </div>
+  </div>
+
+  <!-- 壁纸大图预览（点击库缩略图后弹出；scene 会合成显示原画面） -->
+  <div id="lib-preview-modal" class="lib-preview-modal">
+    <div class="lib-preview-img"><img id="lib-preview-img" src="" alt=""></div>
+    <div id="lib-preview-name" class="lib-preview-name"></div>
+    <div id="lib-preview-status" class="lib-preview-status"></div>
+    <div class="lib-preview-actions">
+      <button id="lib-preview-apply" class="btn">应用此壁纸</button>
+      <button id="lib-preview-close" class="btn btn-ghost">关闭</button>
+    </div>
+  </div>
+
+  <!-- 窗口边缘调整手柄 -->
+  <div class="resize-handle rh-e" data-edge="e"></div>
+  <div class="resize-handle rh-w" data-edge="w"></div>
+  <div class="resize-handle rh-s" data-edge="s"></div>
+  <div class="resize-handle rh-sw" data-edge="sw"></div>
+  <div class="resize-handle rh-se" data-edge="se"></div>
+
+  <script src="js/util.js"></script>
+  <script src="js/palette.js"></script>
+  <script src="js/plan.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/background.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

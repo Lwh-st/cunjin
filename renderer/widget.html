@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data: blob:">
+  <title>寸进 · 悬浮</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="widget-app">
+    <div class="wg-head">
+      <span class="app-name">寸进·浮</span>
+      <span class="spacer"></span>
+      <div class="wg-actions">
+        <button id="wg-add" class="tb-btn" title="添加内容">＋</button>
+        <button id="wg-main" class="tb-btn" title="返回 / 打开主界面">主</button>
+        <button id="wg-gear" class="tb-btn" title="悬浮窗外观">设</button>
+        <button id="wg-close" class="tb-btn tb-close" title="收起（内容保留）">×</button>
+      </div>
+    </div>
+
+    <!-- 悬浮窗独立组件外观面板（透明/毛玻璃，与主界面参数分开） -->
+    <div id="wg-settings" class="modal hidden">
+      <div class="card modal-card" id="wg-settings-card">
+        <h3>悬浮窗外观</h3>
+        <div class="set-row">
+          <label class="unit">组件透明</label>
+          <input id="wg-alpha" type="range" min="0" max="100" value="40">
+          <span id="wg-alpha-val" class="range-val">40%</span>
+        </div>
+        <div class="set-row">
+          <label class="unit">组件毛玻璃</label>
+          <input id="wg-panel-blur" type="range" min="0" max="100" value="40">
+          <span id="wg-panel-blur-val" class="range-val">40%</span>
+        </div>
+        <div class="set-row">
+          <button id="wg-settings-close" class="btn">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="wg-add-menu" class="wg-add-menu">
+      <button data-add="today">今日任务</button>
+      <button data-add="timer">计时器</button>
+      <button data-add="progress">进度条</button>
+    </div>
+
+    <div id="wg-stack" class="wg-stack"></div>
+  </div>
+
+  <!-- 窗口边缘调整手柄 -->
+  <div class="resize-handle rh-e" data-edge="e"></div>
+  <div class="resize-handle rh-w" data-edge="w"></div>
+  <div class="resize-handle rh-s" data-edge="s"></div>
+  <div class="resize-handle rh-sw" data-edge="sw"></div>
+  <div class="resize-handle rh-se" data-edge="se"></div>
+
+  <script src="js/util.js"></script>
+  <script src="js/palette.js"></script>
+  <script src="js/plan.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/widget.js"></script>
+</body>
+</html>
